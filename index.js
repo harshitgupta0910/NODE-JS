@@ -78,7 +78,6 @@ app.post("/api/users", (req, res) => {
 
     users.push(newUser);
     fs.writeFileSync("./MOCK_DATA.json", JSON.stringify(users, null, 2));
-
     return res.status(201).json({ status: "User added", user: newUser });
 });
 
@@ -86,3 +85,5 @@ app.post("/api/users", (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+//all about the routes and method of postman
