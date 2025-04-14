@@ -51,15 +51,16 @@ app.get('/users', async(req, res) => {
 app.route('/api/users/:id')
     .get(async (req, res) => {
         const user = await User.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
         return res.json({ user });
     })
     .patch(async(req, res) => {
         // const id = Number(req.params.id);
         await User.findByIdAndUpdate(req.params.id, {last_name: "Mishra"});
         return res.json({ status: "User updated"});
+    })
+    .delete(async(req, res) => {
+        const user = await User.findByIdAndDelete(req.params.id);
+        return res.json({ status: "User deleted" })
     });
 
 // Middleware to parse request bodies
