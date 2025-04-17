@@ -16,19 +16,17 @@ async function handleGenerateNewShortUrl(req, res) {
         visitHistory: [],
     });
 
-    return res.json({ id: shortId });
+    // After creation, re-render the homepage with all URLs
+    const allUrls = await URL.find({});
+    return res.render("home", { urls: allUrls });
 }
 
 async function handleGetRedirectUrl(req, res) {
     const shortId = req.params.shortId;
-
     const entry = await URL.findOne({ shortId });
 
-    if (!entry) {
-        return res.status(404).send("Short URL not found");
-    }
+    if (!entry) return res.status(404).send("Short URL not found");
 
-    // Optionally track visits
     entry.visitHistory.push({ timestamp: Date.now() });
     await entry.save();
 
@@ -37,15 +35,18 @@ async function handleGetRedirectUrl(req, res) {
 
 async function handleGetAnalytics(req, res) {
     const shortId = req.params.shortId;
-
     const entry = await URL.findOne({ shortId });
 
-    return res.json({totalClicks: entry.visitHistory.length,
-        analytics: entry.visitHistory,});
+    if (!entry) return res.status(404).json({ error: "Not found" });
+
+    return res.json({
+        totalClicks: entry.visitHistory.length,
+        analytics: entry.visitHistory,
+    });
 }
 
 module.exports = {
     handleGenerateNewShortUrl,
     handleGetAnalytics,
-    handleGetRedirectUrl, // ✅ Export redirect handler
+    handleGetRedirectUrl,
 };

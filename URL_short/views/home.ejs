@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #bf0056;
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 300px;
+            font-size: 16px;
+        }
+        ul {
+            padding-left: 0;
+            list-style: none;
+        }
+        li {
+            margin-bottom: 10px;
+            background: #fff;
+            padding: 10px;
+            border-left: 4px solid #00bfa6;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+</head>
+<body>
+    <h1>Welcome to the URL Shortener</h1>
+    
+    <form method="POST" action="/url">
+        <label>Enter your original URL</label><br>
+        <input type="text" name="url" placeholder="https://example.com" required>
+        <br>
+        <button type="submit">Generate</button>
+    </form>
+
+    <% if (urls.length > 0) { %>
+        <h2>Shortened URLs:</h2>
+        <ul>
+        <% urls.forEach(url => { %>
+            <li>
+                <strong>Short:</strong> 
+                <a href="/<%= url.shortId %>" target="_blank"rel="noopener noreferrer">/<%= url.shortId %></a> <br>
+                <strong>Original:</strong> <%= url.redirectUrl %> <br>
+                <a href="/url/analytics/<%= url.shortId %>" target="_blank"rel="noopener noreferrer">View Analytics</a>
+            </li>
+        <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No shortened URLs yet. Submit one above!</p>
+    <% } %>
+</body>
+</html>
